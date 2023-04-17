@@ -1,0 +1,99 @@
+---
+# define the `Deployment` for the mongodb server
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-server
+  labels:
+    app: mongodb-server  #name of deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-server
+  template:
+    metadata:
+      labels:
+        app: mongodb-server
+    spec:
+      containers:
+        - name: mongodb-server
+          image: mongo
+          imagePullPolicy: Always 
+          ports:
+            - containerPort: 27017  # In service matches the targetPort
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: password
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: username
+---
+# define the `Deployment` for mongo-express
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express
+  labels:
+    app: mongo-express
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+        - name: mongo-express
+          image: mongo-express
+          ports:
+            - containerPort: 8081
+          env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: password
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: username
+            - name: ME_CONFIG_MONGODB_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name:  configmap
+                  key: me_config_mongodb_server
+---
+# define the `Deployment` for flask-app
+# set ImagePullPolicy to 'Never' to allow the use of the locally built image
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app #name flask app deployment so service can connect to 
+  labels:
+    app: flask-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+        - name: flask-app
+          image: flask-app-image:latest #to take the latest docker image so update correctly 
+          imagePullPolicy: Never #
+          ports:
+            - containerPort: 5001
