@@ -1,11 +1,52 @@
-# flask-mongo-express-mongodb
-This is a Project solution for a cloud computing course
-[Read more](https://github.com/ta-cc-2023/UE20CS351-Cloud-Computing-Problem-Statements/tree/main/Project-5)
-Team Mates
 
-1. Nytik Birudavolu (PES1UG20CS272)
-2. Pranav R Prasad (PES1UG20CS293)
-3. Pranav  Raju (PES1UG20CS294)
-4. Manoj            (PES1UG20CS246)
+# Introduction
+ This is a Flask Blogging Application designed with Microservices Architecture  and deployed using Kubernetes & Docker.
 
 
+
+# Requirements 
+1. Docker
+2. Minikube
+3. Kubernetes
+
+   
+## How To Run 
+
+`minikube stop`
+
+`minikube delete`
+
+`minikube start `
+
+`#source ~/.bashrc`
+
+`eval $(minikube -p minikube docker-env) #linux`
+
+`minikube docker-env | Invoke-Expression  #powershell`
+ 
+`kubectl apply -f configmap.yaml`
+
+`kubectl apply -f secret.yaml`
+
+`kubectl apply -f services.yaml`
+
+`docker build -t flask-app-image -f  flask-app-image.dockerfile .`
+
+`kubectl apply -f deployments.yaml`
+
+` minikube service flask-service`
+
+![image](https://github.com/Aswin410/flask-mongo-db-express/assets/79198536/f6c712bb-33d8-4996-b9ab-0fadb7122e45)
+
+ 
+
+
+![image](https://github.com/Aswin410/flask-mongo-db-express/assets/79198536/ac6b8377-a6cd-43a8-82be-28e619f472a5)
+
+
+ 
+
+ 
+ 
+
+ 
